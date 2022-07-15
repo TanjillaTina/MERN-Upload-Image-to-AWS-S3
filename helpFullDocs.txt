@@ -1,0 +1,9 @@
+CORS Setup:
+
+1. Go to bucket, by selecting It
+2. Go to "Permisions"==>>"Edit cross-origin resource sharing (CORS)"
+Document to edit::
+
+https://docs.aws.amazon.com/AmazonS3/latest/userguide/ManageCorsUsing.html#cors-example-1
+
+

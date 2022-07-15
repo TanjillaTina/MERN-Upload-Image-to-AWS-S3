@@ -11,15 +11,16 @@ const s3 = new AWS.S3({
 router.get("/", function (req, res, next) {
   res.send({ name: "Img Upload" });
 });
-router.get("/getPresignedPicUrl", (req, res, next) => {
-  const userId = uuid();
-  const key = `${userId}/${uuid()}.jpeg`;
+router.get("/getPresignedPicUrl/:userId/:imgType", (req, res, next) => {
+  const imgId = uuid();
+  const key = `${req.params.userId}/${imgId}.jpeg`;
+  console.log(req.params.imgType);
 
   s3.getSignedUrl(
     "putObject",
     {
       Bucket: keys.aws.bucketName,
-      ContentType: "image/jpeg",
+      ContentType: `image/${req.params.imgType}`, //req.params.imgType, //"image/jpeg",
       Key: key,
     },
     (err, url) => {
