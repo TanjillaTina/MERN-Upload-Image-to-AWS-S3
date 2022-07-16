@@ -6,7 +6,7 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.1171.0",
+    "aws-sdk": "^2.175.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",

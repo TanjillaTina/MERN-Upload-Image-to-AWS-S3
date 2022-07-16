@@ -12,7 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 export const App = () => {
   let userId = "Tina";
   const [isLoading, setIsLoading] = useState(false);
-  const [mesg, setMessage] = useState(null);
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -29,35 +28,56 @@ export const App = () => {
   // const history = useHistory();
   const placeSubmitHandler = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     let imgType = formState.inputs.image.value.type;
+    //console.log("IMGTYPE=>> ", imgType);
     let rImgType = imgType.slice(imgType.indexOf("/") + 1, imgType.length);
     // console.log("parentPath ", rImgType);
     const formData = new FormData();
     formData.append("title", formState.inputs.title.value);
-    formData.append("image", formState.inputs.image.value);
+    formData.append("image", formState.inputs.image);
 
-    // formData.append("creator", auth.userId);
-    // console.log("Inputs==>>> ", formState.inputs.image);
     const uploadConfigs = await axios.get(
-      "http://localhost:3000/upload/getPresignedPicUrl/" +
-        userId +
-        "/" +
-        rImgType
+      "http://localhost:3000/upload/getPresignedUrl/" + userId + "/" + rImgType
     );
+    console.log(uploadConfigs.data.url);
     if (uploadConfigs.data.url) {
-      const uploadFileNow = await axios.put(
-        uploadConfigs.data.url,
-        formState.inputs.image.value,
-        {
+      const uploadFileNow = await axios
+        .put(uploadConfigs.data.url, formState.inputs.image.value, {
           headers: {
-            "Content-Type": imgType,
+            "Content-Type": `image/${imgType}`,
           },
-        }
-      );
-      console.log("Uploaded Status =>> ", uploadFileNow);
+        })
+        .then((response) => {
+          console.log(response.data);
+          setIsLoading(false);
+          toast.success("Successfully Uploaded Image !!!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          resetValues();
+        })
+        .catch((error) => {
+          toast.error("Failed to Upload Image!! Try Again!! ", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setIsLoading(false);
+          console.log(error);
+        });
     } else {
-      toast.error("Failed to Upload Image !!!", {
+      setIsLoading(false);
+      toast.error("Failed to Upload Image !! Try Again!!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -66,50 +86,11 @@ export const App = () => {
         draggable: true,
         progress: undefined,
       });
-      setIsLoading(false);
     }
-
-    /*
-    axios
-      .get(
-        //  process.env.BACKEND_URL +
-        "http://localhost:3000/upload/getPresignedPicUrl/" +
-          userId +
-          "/" +
-          rImgType
-      )
-      .then((response) => {
-        console.log(response.data);
-        setIsLoading(false);
-        toast.success("Fetched Link!!!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      })
-      .catch((error) => {
-        toast.error("Fetched Link!!!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setIsLoading(false);
-        console.log(error);
-      });
-      */
   };
 
   const resetValues = () => {
     setIsLoading(false);
-    setMessage(null);
   };
   let theForm = (
     <form onSubmit={placeSubmitHandler}>
@@ -137,8 +118,6 @@ export const App = () => {
   return (
     <div className="bg">
       <ToastContainer position="top-center" theme="colored" />
-
-      {/* {mesg !== null && <ErrorModal error={mesg} onClear={resetValues} />} */}
       <div className="mform">{isLoading ? <LoadingSpinner /> : theForm}</div>
     </div>
   );
