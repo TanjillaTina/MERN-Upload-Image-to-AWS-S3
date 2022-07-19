@@ -29,13 +29,17 @@ const ViewAll = () => {
   const hfBody = (
     <div>
       {allImages.map((i) => (
-        <div>
-          <h2>{i.title}</h2>
-          <br />
-          <h1>{`${BTK_URL}${i.imgUrl}`}</h1>
-          <div className="place-item__image">
-            <img src={`${BTK_URL}${i.imgUrl}`} alt={i.title} />
+        <div className="card">
+          <div className="container">
+            <h2>
+              <b>{i.title}</b>
+            </h2>
           </div>
+          <img
+            src={`${BTK_URL}${i.imgUrl}`}
+            alt={i.title}
+            style={{ width: "100%" }}
+          />
         </div>
       ))}
     </div>
@@ -48,7 +52,6 @@ const ViewAll = () => {
       ) : (
         hfBody
       )}
-      <h1>Tian</h1>
     </div>
   );
 };
