@@ -7,3 +7,20 @@ Document to edit::
 https://docs.aws.amazon.com/AmazonS3/latest/userguide/ManageCorsUsing.html#cors-example-1
 
 
+{
+    "Id": "Policy1658212324662",
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::bkt-name/*"
+        }
+    ]
+}

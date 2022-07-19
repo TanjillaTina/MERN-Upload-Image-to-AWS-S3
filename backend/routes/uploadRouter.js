@@ -33,4 +33,5 @@ router.get("/getPresignedUrl/:userId/:imgType", (req, res, next) => {
     }
   );
 });
+
 module.exports = router;
